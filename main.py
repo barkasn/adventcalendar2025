@@ -1,6 +1,8 @@
 import functools
 import sys
 import re
+import itertools
+import copy
 
 debug = False
 
@@ -148,30 +150,149 @@ def find_joltage_program():
 
 
 
-
-
 def find_joltage_program_2():
     joltage_filename = 'joltage_input.txt'
     total_output_joltage = 0
 
     def find_max_joltage_2(joltage_rating):
         str_jr = str(joltage_rating)
-
         max_joltage = 0
 
-        import itertools
-        for i in itertools.combinations(range(len(str_jr)),12):
-            v = ''.join([str_jr[index] for index in i])
-            if v > max_value:
-                max_value = v
+        # This works, but is extremely slow
+        # Need to find a better way to do this
+        for i in itertools.combinations(list(range(len(str_jr))),12):
+            v = int(''.join([str_jr[index] for index in i]))
+            if v > max_joltage:
+                max_joltage = v
         return max_joltage
 
+    print("Calculating total output joltage..", end='', flush=True)
     with open(joltage_filename, 'r') as file:
         for line in file:
-            joltage_rating = int(line.strip())
-            total_output_joltage = total_output_joltage + find_max_joltage_2(joltage_rating)
+            print(".", end='', flush=True)
+            total_output_joltage = total_output_joltage + find_max_joltage_2(line.strip())
 
     print(f"The total output joltage is: {total_output_joltage}")
+
+
+def folklift_access_program():
+    input_filename = 'forklift_access_input.txt'
+
+    working_floor = []
+    line_length = 0
+    n_lines = 0
+    accessible_rolls = 0
+
+    # Load data
+    with open(input_filename, 'r') as file:
+        for line in file:
+            line_array = list(line.strip())
+            if line_length == 0:
+                line_length = len(line_array)
+            elif len(line_array) != line_length:
+                print("Error: Inconsistent line lengths in input file.")
+                return
+            working_floor.append(line_array)
+            n_lines += 1
+
+    output_floor = copy.deepcopy(working_floor)
+    
+
+    def check_is_roll(i, j):
+        if working_floor[i][j] == '@':
+            return True
+        return False    
+
+    def check_if_accessible(i, j):
+        n_surrounding_roles = 0
+
+        directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
+        for direction in directions:
+            ni, nj = i + direction[0], j + direction[1]
+            if 0 <= ni < n_lines and 0 <= nj < line_length:
+                if check_is_roll(ni, nj):
+                    n_surrounding_roles += 1
+
+        if n_surrounding_roles < 4:
+            return True
+        return False
+
+    for i in range(n_lines):
+        for j in range(line_length):
+            if check_is_roll(i,j):
+                if check_if_accessible(i, j):
+                    output_floor[i][j] = 'x'  # Mark as accessible
+                    accessible_rolls += 1
+
+    print(f"Number of accessible forklift rolls: {accessible_rolls}")
+
+    if debug:
+        for row in output_floor:
+            print(' '.join(row))
+
+
+def folklift_access_program_2():
+    input_filename = 'forklift_access_input.txt'
+
+    total_removable_rolls = 0
+
+    working_floor = []
+    line_length = 0
+    n_lines = 0
+    accessible_rolls = 0
+
+    # Load data
+    with open(input_filename, 'r') as file:
+        for line in file:
+            line_array = list(line.strip())
+            if line_length == 0:
+                line_length = len(line_array)
+            elif len(line_array) != line_length:
+                print("Error: Inconsistent line lengths in input file.")
+                return
+            working_floor.append(line_array)
+            n_lines += 1
+
+    output_floor = copy.deepcopy(working_floor)
+    
+
+    def check_is_roll(i, j):
+        if working_floor[i][j] == '@':
+            return True
+        return False    
+
+    def check_if_accessible(i, j):
+        n_surrounding_roles = 0
+
+        directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
+        for direction in directions:
+            ni, nj = i + direction[0], j + direction[1]
+            if 0 <= ni < n_lines and 0 <= nj < line_length:
+                if check_is_roll(ni, nj):
+                    n_surrounding_roles += 1
+
+        if n_surrounding_roles < 4:
+            return True
+        return False
+
+    rolls_removed = True
+    while rolls_removed == True:
+        rolls_removed = False
+        accessible_rolls = 0
+
+        for i in range(n_lines):
+            for j in range(line_length):
+                if check_is_roll(i,j):
+                    if check_if_accessible(i, j):
+                        output_floor[i][j] = '.'  # Mark as removed in the output
+                        accessible_rolls += 1
+                        rolls_removed = True
+
+        working_floor = copy.deepcopy(output_floor)
+
+        total_removable_rolls += accessible_rolls
+
+    print(f"Total number of removable forklift rolls: {total_removable_rolls}")
 
 def menu():
     print("1. Calculate Fibonacci")
@@ -180,8 +301,10 @@ def menu():
     print("4. Invalid Ids")
     print("5. Invalid Ids II")
     print("6. Find Joltage")
-    print("7. Find Joltage II")
-    print("8. Exit")
+    print("7. Find Joltage II (very slow)")
+    print("8. Forklift Access")
+    print("9. Forklift Access 2")
+    print("10. Exit")
 
 def handle_input(choice):
     if choice == '1':
@@ -199,6 +322,10 @@ def handle_input(choice):
     elif choice == '7':
         find_joltage_program_2()
     elif choice == '8':
+        folklift_access_program()
+    elif choice == '9':
+        folklift_access_program_2()
+    elif choice == '10':
         print("Exiting the program.")
         sys.exit(0)
     else:
