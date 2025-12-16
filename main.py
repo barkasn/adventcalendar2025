@@ -450,6 +450,52 @@ def tachyon_manifold_program():
     press_enter_to_continue()
 
 
+def playground_program(input_data_filename = "data/day8_playground_test.txt", max_distance=10000000.0, n_connections = 1000):
+    import numpy as np
+    from scipy.spatial import KDTree
+    import scipy.sparse as sp
+    import igraph as ig
+
+    # Load points from CSV
+    points = np.genfromtxt(input_data_filename, delimiter=",")
+    if debug:
+        print(f"Loaded {points.shape[0]} points from {input_data_filename}")
+
+    # Create graph and add vertices
+    g = ig.Graph()
+    g.add_vertices(points.shape[0])
+
+    # Calculate distance matrix
+    kd_tree = KDTree(points)
+    sdm = kd_tree.sparse_distance_matrix(kd_tree, max_distance=max_distance)
+
+    # Find the cutoff for the the top N closest edges
+    distances = sp.tril(sdm, k=-1).data
+    distances_sorted = np.sort(distances)
+    if debug:
+        print(f'distances_sorted: {distances_sorted}')
+    pairs_cutoff = distances_sorted[n_connections - 1]
+
+    # Add edges to the graph based on the sparse distance matrix
+    for (u, v), dist in sdm.items():
+        if dist <= pairs_cutoff:
+            g.add_edge(u, v, weight=dist)
+    if debug:
+        print(g.summary())
+
+    # Find the connected components and generate answers
+    components = g.components()
+    print(f"Number of components: {len(components)}")
+
+    component_lengths = sorted([len(c) for c in components], reverse=True)[0:3]
+    print(f"Component lengths: {component_lengths}")    
+
+    answer = eval('*'.join([str(cl) for cl in component_lengths]))
+    print(f"Playground answer: {answer}")
+
+    press_enter_to_continue()
+
+
 def main_menu():
     from consolemenu import ConsoleMenu
     from consolemenu.items import FunctionItem
@@ -502,6 +548,15 @@ def main_menu():
         "Tachyon Manifold (day 7 part 1)", tachyon_manifold_program
     )
     menu.append_item(function_item_13)
+
+    function_item_14 = FunctionItem(
+        "Tachyon Manifold 2 (day 7 part 2) NOT WORKING", None
+    )
+    menu.append_item(function_item_14)
+
+    function_item_15 = FunctionItem("Day 8: Playground", playground_program)
+    menu.append_item(function_item_15)
+
     menu.show()
 
 
