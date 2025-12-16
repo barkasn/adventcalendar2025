@@ -326,7 +326,7 @@ def ingredients_list_program_2():
     input_filename = 'ingredients_list.txt'
     total_fresh_ingredients = 0
 
-    fresh_ingredients_ranges = set()
+    fresh_ingredients_ranges = list()
 
     mode = 'read_fresh'
 
@@ -336,7 +336,7 @@ def ingredients_list_program_2():
             continue
         elif mode == 'read_fresh':
             [start, end] = line.strip().split('-')
-            fresh_ingredients_ranges.add([int(start), int(end)])
+            fresh_ingredients_ranges.append([int(start), int(end)])
             continue
 
     def check_overlap(range1, range2):
@@ -356,7 +356,7 @@ def ingredients_list_program_2():
         end = max(range1[1], range2[1])
         return [start, end]
 
-    new_ranges = set()
+    new_ranges = list()
 
     merge_in_last_iteration = True
     while(merge_in_last_iteration):
@@ -365,11 +365,13 @@ def ingredients_list_program_2():
         for i in range(n_ranges):
             for j in range(i, n_ranges):
                 if check_overlap(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]):
-                    new_ranges.add(merge_ranges(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]))
+                    new_ranges.append(merge_ranges(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]))
                     merge_in_last_iteration = True
                 else:
-                    new_ranges.add(fresh_ingredients_ranges[i])
-                    new_ranges.add(fresh_ingredients_ranges[j])
+                    new_ranges.append(fresh_ingredients_ranges[i])
+                    new_ranges.append(fresh_ingredients_ranges[j])
+        fresh_ingredients_ranges = copy.deepcopy(new_ranges)
+        new_ranges = list()
 
             
     
