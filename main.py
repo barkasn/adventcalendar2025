@@ -358,15 +358,19 @@ def cephalopod_math_homework_program():
     for line in open(input_file_name, 'r'):
         entries = enumerate(line.strip().split())
         for index, entry in entries:
-            data[index].append(int(entry))
+            data[index].append(entry)
 
+    total = 0
     for index in data:
         column_data = data[index][:-1]
         column_operation = str(data[index][-1])
 
         op = column_operation.join(column_data)
+        res = eval(op)
 
-        print(f"Column {index}: Operation {column_operation} Result {op}")
+        total += res
+
+    print(f"The total of all columns is: {total}")
 
 
         
@@ -416,7 +420,7 @@ def handle_input(choice):
         ingredients_list_program()
     elif choice == '11':
         ingredients_list_program_2()
-    elif choice == '12":
+    elif choice == '12':
         cephalopod_math_homework_program()
 
     elif choice == '100':
