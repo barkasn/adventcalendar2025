@@ -15,7 +15,8 @@ def elves_dial_program():
     start_position = 50
     n_times_pointing_zero = 0
 
-    filename = 'elves_rotations.txt'
+    filename = 'data/elves_rotations.txt'
+
     with open(filename, 'r') as file:
         for line in file:
             rotation = line.strip()
@@ -41,7 +42,7 @@ def elves_dial_program_2():
     start_position = 50
     n_times_pointing_zero = 0
 
-    filename = 'elves_rotations.txt'
+    filename = 'data/elves_rotations.txt'
     with open(filename, 'r') as file:
         for line in file:
             rotation = line.strip()
@@ -69,7 +70,7 @@ def elves_dial_program_2():
 
 def invalid_ids_program():
     invalid_ids_running_sum = 0
-    invalid_ids_filename = 'invalid_ids.txt'
+    invalid_ids_filename = 'data/invalid_ids.txt'
 
     def is_invalid_id(id):
         str_id = str(id)
@@ -94,7 +95,7 @@ def invalid_ids_program():
 
 def invalid_ids_program_2():
     invalid_ids_running_sum = 0
-    invalid_ids_filename = 'invalid_ids.txt'
+    invalid_ids_filename = 'data/invalid_ids.txt'
 
     def is_invalid_id(id):
         str_id = str(id)
@@ -120,7 +121,7 @@ def invalid_ids_program_2():
 
 
 def find_joltage_program():
-    joltage_filename = 'joltage_input.txt'
+    joltage_filename = 'data/joltage_input.txt'
     total_output_joltage = 0
 
     def find_max_joltage(joltage_rating):
@@ -147,7 +148,7 @@ def find_joltage_program():
 
 
 def find_joltage_program_2():
-    joltage_filename = 'joltage_input.txt'
+    joltage_filename = 'data/joltage_input.txt'
     total_output_joltage = 0
 
     def find_max_joltage_2(joltage_rating):
@@ -172,7 +173,7 @@ def find_joltage_program_2():
 
 
 def folklift_access_program():
-    input_filename = 'forklift_access_input.txt'
+    input_filename = 'data/forklift_access_input.txt'
 
     working_floor = []
     line_length = 0
@@ -228,7 +229,7 @@ def folklift_access_program():
 
 
 def folklift_access_program_2():
-    input_filename = 'forklift_access_input.txt'
+    input_filename = 'data/forklift_access_input.txt'
 
     total_removable_rolls = 0
 
@@ -292,7 +293,7 @@ def folklift_access_program_2():
 
 
 def ingredients_list_program():
-    input_filename = 'ingredients_list.txt'
+    input_filename = 'data/ingredients_list.txt'
     fresh_ingredients_ranges = list()
     n_fresh_ingredients = 0
     mode = 'read_fresh'
@@ -322,7 +323,7 @@ def ingredients_list_program():
 def ingredients_list_program_2():
     from intervaltree import Interval, IntervalTree
 
-    input_filename = 'ingredients_list.txt'
+    input_filename = 'data/ingredients_list.txt'
 
     mode = 'read_fresh'
     fresh_intervals = IntervalTree()
@@ -345,7 +346,7 @@ def ingredients_list_program_2():
     print(f"Total fresh ingredient count {total_fresh_ingredients}")
 
 def cephalopod_math_homework_program():
-    input_file_name = 'cephalopod_math_homework.txt'
+    input_file_name = 'data/cephalopod_math_homework.txt'
 
     from collections import defaultdict
 
@@ -382,7 +383,7 @@ def tachyon_manifold_program():
     tachyon_positions = set()
     new_tachyon_positions = set()
 
-    for line in open('tachyon_manifold.txt', 'r'):
+    for line in open('data/tachyon_manifold.txt', 'r'):
         line_array = list(line.strip())
 
         if debug:
