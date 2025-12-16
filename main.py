@@ -373,7 +373,7 @@ def ingredients_list_program_2():
         fresh_ingredients_ranges = copy.deepcopy(new_ranges)
         new_ranges = list()
 
-            
+    # Now all overlapping ranges have been merged
     
 
 def menu():
