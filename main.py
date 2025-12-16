@@ -7,17 +7,10 @@ import gc
 from maker import maker
 import argparse
 
+# Global debug flag
 debug = False
 
-@functools.lru_cache(maxsize=None)
-def fibonnaci(n):
-    if n == 0:
-        return 0
-    elif n == 1:
-        return 1
-    else:
-        return fibonnaci(n - 1) + fibonnaci(n - 2)
-    
+
 def elves_dial_program():
     start_position = 50
     n_times_pointing_zero = 0
@@ -318,7 +311,8 @@ def ingredients_list_program():
             ingredient_is_fresh = False
             for r in fresh_ingredients_ranges:
                 if ingredient >= r[0] and ingredient <= r[1]:
-                    print(f'Ingredient {ingredient} is fresh')
+                    if debug:
+                        print(f'Ingredient {ingredient} is fresh')
                     ingredient_is_fresh = True
             if ingredient_is_fresh:
                 n_fresh_ingredients += 1
@@ -391,7 +385,8 @@ def tachyon_manifold_program():
     for line in open('tachyon_manifold.txt', 'r'):
         line_array = list(line.strip())
 
-        print(line_array)
+        if debug:
+            print(line_array)
 
         if mode == 'initialize':
             tachyon_positions = [i for i, x in enumerate(line_array) if x == 'S']
@@ -420,7 +415,7 @@ def main():
     parser = argparse.ArgumentParser(
                     prog='Advent of Code 2025 Challenges')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
-    args = args.parse_args()
+    args = parser.parse_args()
 
     if args.debug:
         global debug
