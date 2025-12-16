@@ -1,9 +1,9 @@
-import functools
+
 import sys
 import re
 import itertools
 import copy
-import gc
+
 from maker import maker
 import argparse
 
@@ -273,7 +273,7 @@ def folklift_access_program_2():
         return False
 
     rolls_removed = True
-    while rolls_removed == True:
+    while rolls_removed:
         rolls_removed = False
         accessible_rolls = 0
 
