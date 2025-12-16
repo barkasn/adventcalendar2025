@@ -2,12 +2,16 @@ import sys
 import re
 import itertools
 import copy
-
-from maker import maker
 import argparse
+
 
 # Global debug flag
 debug = False
+
+
+def press_enter_to_continue():
+    print("Press Enter to continue...")
+    input()
 
 
 def elves_dial_program():
@@ -34,6 +38,8 @@ def elves_dial_program():
                 n_times_pointing_zero += 1
 
     print(f"The dial pointed to 0 a total of {n_times_pointing_zero} times.")
+
+    press_enter_to_continue()
 
 
 def elves_dial_program_2():
@@ -68,6 +74,8 @@ def elves_dial_program_2():
         f"The dial pointed to 0 a total of {n_times_pointing_zero} times using method 0x434C49434B."
     )
 
+    press_enter_to_continue()
+
 
 def invalid_ids_program():
     invalid_ids_running_sum = 0
@@ -92,6 +100,7 @@ def invalid_ids_program():
                     invalid_ids_running_sum = invalid_ids_running_sum + i
 
     print(f"The sum of all invalid IDs is: {invalid_ids_running_sum}")
+    press_enter_to_continue()
 
 
 def invalid_ids_program_2():
@@ -119,6 +128,7 @@ def invalid_ids_program_2():
                     invalid_ids_running_sum = invalid_ids_running_sum + i
 
     print(f"The sum of all invalid IDs is: {invalid_ids_running_sum}")
+    press_enter_to_continue()
 
 
 def find_joltage_program():
@@ -146,6 +156,7 @@ def find_joltage_program():
             )
 
     print(f"The total output joltage is: {total_output_joltage}")
+    press_enter_to_continue()
 
 
 def find_joltage_program_2():
@@ -173,6 +184,7 @@ def find_joltage_program_2():
             )
 
     print(f"The total output joltage is: {total_output_joltage}")
+    press_enter_to_continue()
 
 
 def folklift_access_program():
@@ -237,6 +249,8 @@ def folklift_access_program():
     if debug:
         for row in output_floor:
             print(" ".join(row))
+
+    press_enter_to_continue()
 
 
 def folklift_access_program_2():
@@ -310,6 +324,8 @@ def folklift_access_program_2():
 
     print(f"Total number of removable forklift rolls: {total_removable_rolls}")
 
+    press_enter_to_continue()
+
 
 def ingredients_list_program():
     input_filename = "data/ingredients_list.txt"
@@ -337,6 +353,7 @@ def ingredients_list_program():
                 n_fresh_ingredients += 1
 
     print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
+    press_enter_to_continue()
 
 
 def ingredients_list_program_2():
@@ -363,6 +380,7 @@ def ingredients_list_program_2():
         total_fresh_ingredients += interval_obj.end - interval_obj.begin
 
     print(f"Total fresh ingredient count {total_fresh_ingredients}")
+    press_enter_to_continue()
 
 
 def cephalopod_math_homework_program():
@@ -388,10 +406,12 @@ def cephalopod_math_homework_program():
         total += res
 
     print(f"The total of all columns is: {total}")
+    press_enter_to_continue()
 
 
 def cephalopod_math_homework_program_2():
     print("Cephalopod Math Homework 2 is not yet implemented.")
+    press_enter_to_continue()
 
 
 def tachyon_manifold_program():
@@ -427,6 +447,62 @@ def tachyon_manifold_program():
             continue
 
     print(f"The tachyon manifold caused {n_splits} splits.")
+    press_enter_to_continue()
+
+
+def main_menu():
+    from consolemenu import ConsoleMenu
+    from consolemenu.items import FunctionItem
+
+    menu = ConsoleMenu("Advent of Code 2025 Challenges")
+    function_item_1 = FunctionItem("Elves Dial (day 1 part 1)", elves_dial_program)
+    menu.append_item(function_item_1)
+    function_item_2 = FunctionItem(
+        "Elves Dial 0x434C49434B (day 1 part 2)", elves_dial_program_2
+    )
+    menu.append_item(function_item_2)
+    function_item_3 = FunctionItem("Invalid Ids (day 21 part 1)", invalid_ids_program)
+    menu.append_item(function_item_3)
+    function_item_4 = FunctionItem(
+        "Invalid Ids II (day 2 part 2)", invalid_ids_program_2
+    )
+    menu.append_item(function_item_4)
+    function_item_5 = FunctionItem("Find Joltage  (day 3 part 1)", find_joltage_program)
+    menu.append_item(function_item_5)
+    function_item_6 = FunctionItem(
+        "Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2
+    )
+    menu.append_item(function_item_6)
+    function_item_7 = FunctionItem(
+        "Forklift Access  (day 4 part 1)", folklift_access_program
+    )
+    menu.append_item(function_item_7)
+    function_item_8 = FunctionItem(
+        "Forklift Access 2  (day 4 part 2)", folklift_access_program_2
+    )
+    menu.append_item(function_item_8)
+    function_item_9 = FunctionItem(
+        "Ingredients List  (day 5 part 1)", ingredients_list_program
+    )
+    menu.append_item(function_item_9)
+    function_item_10 = FunctionItem(
+        "Ingredients List 2  (day 5 part 2)", ingredients_list_program_2
+    )
+    menu.append_item(function_item_10)
+    function_item_11 = FunctionItem(
+        "Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program
+    )
+    menu.append_item(function_item_11)
+    function_item_12 = FunctionItem(
+        "Cephalopod Math Homework (day 6 part 2) NOT WORKING",
+        cephalopod_math_homework_program_2,
+    )
+    menu.append_item(function_item_12)
+    function_item_13 = FunctionItem(
+        "Tachyon Manifold (day 7 part 1)", tachyon_manifold_program
+    )
+    menu.append_item(function_item_13)
+    menu.show()
 
 
 def main():
@@ -438,31 +514,8 @@ def main():
         global debug
         debug = True
 
-    main_menu = maker.Menu()
-    main_menu.heading("adventofcode.com Challenges 2025")
-    main_menu.selection("Elves Dial (day 1 part 1)", elves_dial_program)
-    main_menu.selection("Elves Dial 0x434C49434B (day 1 part 2)", elves_dial_program_2)
-    main_menu.selection("Invalid Ids (day 21 part 1)", invalid_ids_program)
-    main_menu.selection("Invalid Ids II (day 2 part 2)", invalid_ids_program_2)
-    main_menu.selection("Find Joltage  (day 3 part 1)", find_joltage_program)
-    main_menu.selection(
-        "Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2
-    )
-    main_menu.selection("Forklift Access  (day 4 part 1)", folklift_access_program)
-    main_menu.selection("Forklift Access 2  (day 4 part 2)", folklift_access_program_2)
-    main_menu.selection("Ingredients List  (day 5 part 1)", ingredients_list_program)
-    main_menu.selection(
-        "Ingredients List 2  (day 5 part 2)", ingredients_list_program_2
-    )
-    main_menu.selection(
-        "Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program
-    )
-    main_menu.selection(
-        "Cephalopod Math Homework (day 6 part 2) NOT WORKING",
-        cephalopod_math_homework_program_2,
-    )
-    main_menu.selection("Tachyon Manifold (day 7 part 1)", tachyon_manifold_program)
-    main_menu.deploy()
+    main_menu()
+
     sys.exit(0)
 
 
