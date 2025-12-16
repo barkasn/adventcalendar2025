@@ -297,12 +297,8 @@ def folklift_access_program_2():
 
 def ingredients_list_program():
     input_filename = 'ingredients_list.txt'
-
-    fresh_ingredients = set()
-    available_ingredients = set()
-
+    fresh_ingredients_ranges = list()
     n_fresh_ingredients = 0
-
     mode = 'read_fresh'
 
     with open(input_filename, 'r') as file:
@@ -312,16 +308,12 @@ def ingredients_list_program():
                 continue
             if mode == 'read_fresh':
                 [start, end] = line.strip().split('-')
-                for i in range(int(start), int(end) + 1):
-                    fresh_ingredients.add(i)
+                fresh_ingredients_ranges.append([start, end])
             elif mode == 'read_available':
-                ingredient = line.strip()
-                if ingredient:
-                    available_ingredients.add(int(ingredient))
-
-    for ingredient in available_ingredients:
-        if int(ingredient) in fresh_ingredients:
-            n_fresh_ingredients += 1
+                ingredient = int(line.strip())
+                for r in fresh_ingredients_ranges:
+                    if ingredient >= r[0] and ingredient <= r[1]:
+                        n_fresh_ingredients += 1
 
     print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
 
