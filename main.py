@@ -294,6 +294,40 @@ def folklift_access_program_2():
 
     print(f"Total number of removable forklift rolls: {total_removable_rolls}")
 
+
+def ingredients_list_program():
+    input_filename = 'ingredients_list.txt'
+
+    fresh_ingredients = set()
+    available_ingredients = set()
+
+    n_fresh_ingredients = 0
+
+    mode = 'read_fresh'
+
+    with open(input_filename, 'r') as file:
+        for line in file:
+            if line.strip() == '':
+                mode = 'read_available'
+                continue
+            if mode == 'read_fresh':
+                [start, end] = line.strip().split('-')
+                for i in range(int(start), int(end) + 1):
+                    fresh_ingredients.add(i)
+            elif mode == 'read_available':
+                ingredient = line.strip()
+                if ingredient:
+                    available_ingredients.add(int(ingredient))
+
+    for ingredient in available_ingredients:
+        if int(ingredient) in fresh_ingredients:
+            n_fresh_ingredients += 1
+
+    print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
+
+    
+            
+
 def menu():
     print("1. Calculate Fibonacci")
     print("2. Elves Dial")
@@ -304,7 +338,11 @@ def menu():
     print("7. Find Joltage II (very slow)")
     print("8. Forklift Access")
     print("9. Forklift Access 2")
-    print("10. Exit")
+    print("10. Ingredients List")
+
+
+
+    print("100. Exit")
 
 def handle_input(choice):
     if choice == '1':
@@ -326,6 +364,9 @@ def handle_input(choice):
     elif choice == '9':
         folklift_access_program_2()
     elif choice == '10':
+        ingredients_list_program()
+
+    elif choice == '100':
         print("Exiting the program.")
         sys.exit(0)
     else:
