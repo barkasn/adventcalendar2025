@@ -450,7 +450,11 @@ def tachyon_manifold_program():
     press_enter_to_continue()
 
 
-def playground_program(input_data_filename = "data/day8_playground_test.txt", max_distance=10000000.0, n_connections = 1000):
+def playground_program(
+    input_data_filename="data/day8_playground_test.txt",
+    max_distance=10000000.0,
+    n_connections=1000,
+):
     import numpy as np
     from scipy.spatial import KDTree
     import scipy.sparse as sp
@@ -473,7 +477,7 @@ def playground_program(input_data_filename = "data/day8_playground_test.txt", ma
     distances = sp.tril(sdm, k=-1).data
     distances_sorted = np.sort(distances)
     if debug:
-        print(f'distances_sorted: {distances_sorted}')
+        print(f"distances_sorted: {distances_sorted}")
     pairs_cutoff = distances_sorted[n_connections - 1]
 
     # Add edges to the graph based on the sparse distance matrix
@@ -488,18 +492,21 @@ def playground_program(input_data_filename = "data/day8_playground_test.txt", ma
     print(f"Number of components: {len(components)}")
 
     component_lengths = sorted([len(c) for c in components], reverse=True)[0:3]
-    print(f"Component lengths: {component_lengths}")    
+    print(f"Component lengths: {component_lengths}")
 
-    answer = eval('*'.join([str(cl) for cl in component_lengths]))
+    answer = eval("*".join([str(cl) for cl in component_lengths]))
     print(f"Playground answer: {answer}")
 
     press_enter_to_continue()
 
 
-def playground_program_2(input_data_filename = "data/day8_playground_test.txt", max_distance=10000000.0, n_connections = 1000):
+def playground_program_2(
+    input_data_filename="data/day8_playground_test.txt",
+    max_distance=10000000.0,
+    n_connections=1000,
+):
     import numpy as np
     from scipy.spatial import KDTree
-    import scipy.sparse as sp
     import igraph as ig
 
     # Load points from CSV
@@ -530,12 +537,12 @@ def playground_program_2(input_data_filename = "data/day8_playground_test.txt", 
     if debug:
         print(f"distances shape: {distances.shape}")
 
-    sort_indices = distances[:,2].argsort()
+    sort_indices = distances[:, 2].argsort()
     sorted_distances = distances[sort_indices]
 
     last_row = None
     for row in sorted_distances:
-        last_row  = row
+        last_row = row
         u = int(row[0])
         v = int(row[1])
         d = row[2]
@@ -573,7 +580,9 @@ def main_menu():
         "Day 2: Invalid Ids - Part II", invalid_ids_program_2
     )
     menu.append_item(function_item_4)
-    function_item_5 = FunctionItem("Day 3: Find Joltage - Part I)", find_joltage_program)
+    function_item_5 = FunctionItem(
+        "Day 3: Find Joltage - Part I)", find_joltage_program
+    )
 
     menu.append_item(function_item_5)
     function_item_6 = FunctionItem(
