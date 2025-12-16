@@ -331,51 +331,24 @@ def ingredients_list_program_2():
 
     mode = 'read_fresh'
 
+    from intervaltree import Interval, IntervalTree
+
+    fresh_intervals = IntervalTree()
+
     for line in open(input_filename, 'r'):
         if line.strip() == '':
             mode = 'read_available'
             continue
         elif mode == 'read_fresh':
             [start, end] = line.strip().split('-')
-            fresh_ingredients_ranges.append([int(start), int(end)])
+            fresh_intervals.add(Interval(int(start),int(end)))
             continue
 
-    def check_overlap(range1, range2):
-        """
-        Checks if two ranges (tuples) overlap.
-        A range is represented as (start, end).
-        """
-        start1, end1 = range1
-        start2, end2 = range2
-        # They overlap if it's NOT the case that one ends before the other starts
-        # e.g., range1 does not end before range2 starts (end1 < start2)
-        # AND range2 does not end before range1 starts (end2 < start1)
-        return not (end1 < start2 or end2 < start1)
+    # Merge overlaps
+    fresh_intervals.merge_overlaps()
 
-    def merge_ranges(range1, range2):
-        start = min(range1[0], range2[0])
-        end = max(range1[1], range2[1])
-        return [start, end]
+    
 
-    new_ranges = list()
-
-    merge_in_last_iteration = True
-    while(merge_in_last_iteration):
-        merge_in_last_iteration = False
-        n_ranges = len(fresh_ingredients_ranges)
-        for i in range(n_ranges):
-            for j in range(i, n_ranges):
-                if check_overlap(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]):
-                    new_ranges.append(merge_ranges(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]))
-                    merge_in_last_iteration = True
-                else:
-                    new_ranges.append(fresh_ingredients_ranges[i])
-                    new_ranges.append(fresh_ingredients_ranges[j])
-        fresh_ingredients_ranges = copy.deepcopy(new_ranges)
-        new_ranges = list()
-        gc.collect()
-
-    # Now all overlapping ranges have been merged
     
 
 def menu():
