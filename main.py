@@ -3,6 +3,7 @@ import sys
 import re
 import itertools
 import copy
+import gc
 
 debug = False
 
@@ -372,6 +373,7 @@ def ingredients_list_program_2():
                     new_ranges.append(fresh_ingredients_ranges[j])
         fresh_ingredients_ranges = copy.deepcopy(new_ranges)
         new_ranges = list()
+        gc.collect()
 
     # Now all overlapping ranges have been merged
     
