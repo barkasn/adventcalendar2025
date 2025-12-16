@@ -559,60 +559,63 @@ def main_menu():
     from consolemenu.items import FunctionItem
 
     menu = ConsoleMenu("Advent of Code 2025 Challenges")
-    function_item_1 = FunctionItem("Elves Dial (day 1 part 1)", elves_dial_program)
+    function_item_1 = FunctionItem("Day 1: Elves Dial - Part I", elves_dial_program)
+
     menu.append_item(function_item_1)
     function_item_2 = FunctionItem(
-        "Elves Dial 0x434C49434B (day 1 part 2)", elves_dial_program_2
+        "Day 1: Elves Dial 0x434C49434B - Part II", elves_dial_program_2
     )
     menu.append_item(function_item_2)
-    function_item_3 = FunctionItem("Invalid Ids (day 21 part 1)", invalid_ids_program)
+    function_item_3 = FunctionItem("Day 2: Invalid Ids - Part I", invalid_ids_program)
+
     menu.append_item(function_item_3)
     function_item_4 = FunctionItem(
-        "Invalid Ids II (day 2 part 2)", invalid_ids_program_2
+        "Day 2: Invalid Ids - Part II", invalid_ids_program_2
     )
     menu.append_item(function_item_4)
-    function_item_5 = FunctionItem("Find Joltage  (day 3 part 1)", find_joltage_program)
+    function_item_5 = FunctionItem("Day 3: Find Joltage - Part I)", find_joltage_program)
+
     menu.append_item(function_item_5)
     function_item_6 = FunctionItem(
-        "Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2
+        "Day 3: Find Joltage II (very slow) part II", find_joltage_program_2
     )
     menu.append_item(function_item_6)
     function_item_7 = FunctionItem(
-        "Forklift Access  (day 4 part 1)", folklift_access_program
+        "Day 4: Forklift Access  - part I", folklift_access_program
     )
     menu.append_item(function_item_7)
     function_item_8 = FunctionItem(
-        "Forklift Access 2  (day 4 part 2)", folklift_access_program_2
+        "Day 4: Forklift Access 2 - part II", folklift_access_program_2
     )
     menu.append_item(function_item_8)
     function_item_9 = FunctionItem(
-        "Ingredients List  (day 5 part 1)", ingredients_list_program
+        "Day 5: Ingredients List - part I", ingredients_list_program
     )
     menu.append_item(function_item_9)
     function_item_10 = FunctionItem(
-        "Ingredients List 2  (day 5 part 2)", ingredients_list_program_2
+        "Day 5: Ingredients List 2 - Part II", ingredients_list_program_2
     )
     menu.append_item(function_item_10)
     function_item_11 = FunctionItem(
-        "Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program
+        "Day 6: Cephalopod Math Homework - part I", cephalopod_math_homework_program
     )
     menu.append_item(function_item_11)
     function_item_12 = FunctionItem(
-        "Cephalopod Math Homework (day 6 part 2) NOT WORKING",
+        "Day 6: Cephalopod Math Homework - part II - Not working",
         cephalopod_math_homework_program_2,
     )
     menu.append_item(function_item_12)
     function_item_13 = FunctionItem(
-        "Tachyon Manifold (day 7 part 1)", tachyon_manifold_program
+        "Day 7: Tachyon Manifold - part I", tachyon_manifold_program
     )
     menu.append_item(function_item_13)
 
     function_item_14 = FunctionItem(
-        "Tachyon Manifold 2 (day 7 part 2) NOT WORKING", None
+        "Day 7: Tachyon Manifold 2 - part II - NOT WORKING", None
     )
     menu.append_item(function_item_14)
 
-    function_item_15 = FunctionItem("Day 8: Playground", playground_program)
+    function_item_15 = FunctionItem("Day 8: Playground - part I", playground_program)
     menu.append_item(function_item_15)
 
     function_item_16 = FunctionItem("Day 8: Playground - part II", playground_program_2)
@@ -622,16 +625,18 @@ def main_menu():
 
 
 def main():
+    # Parse command-line arguments
     parser = argparse.ArgumentParser(prog="Advent of Code 2025 Challenges")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
 
+    # Set global debug flag
     if args.debug:
         global debug
         debug = True
 
+    # Show main menu
     main_menu()
-
     sys.exit(0)
 
 
