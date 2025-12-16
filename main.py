@@ -324,31 +324,29 @@ def ingredients_list_program():
     print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
 
 def ingredients_list_program_2():
-    input_filename = 'ingredients_list.txt'
-    total_fresh_ingredients = 0
-
-    fresh_ingredients_ranges = list()
-
-    mode = 'read_fresh'
-
     from intervaltree import Interval, IntervalTree
 
-    fresh_intervals = IntervalTree()
+    input_filename = 'ingredients_list.txt'
 
+    mode = 'read_fresh'
+    fresh_intervals = IntervalTree()
     for line in open(input_filename, 'r'):
         if line.strip() == '':
             mode = 'read_available'
             continue
         elif mode == 'read_fresh':
             [start, end] = line.strip().split('-')
-            fresh_intervals.add(Interval(int(start),int(end)))
+            fresh_intervals.add(Interval(int(start),int(end)+1))
             continue
 
     # Merge overlaps
     fresh_intervals.merge_overlaps()
 
-    
+    total_fresh_ingredients = 0
+    for interval_obj in fresh_intervals:
+        total_fresh_ingredients += interval_obj.end - interval_obj.begin
 
+    print(f"Total fresh ingredient count {total_fresh_ingredients}")
     
 
 def menu():
