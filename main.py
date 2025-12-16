@@ -324,7 +324,9 @@ def ingredients_list_program():
 
 def ingredients_list_program_2():
     input_filename = 'ingredients_list.txt'
-    fresh_ingredients = set()
+    total_fresh_ingredients = 0
+
+    fresh_ingredients_ranges = set()
 
     mode = 'read_fresh'
 
@@ -334,14 +336,43 @@ def ingredients_list_program_2():
             continue
         elif mode == 'read_fresh':
             [start, end] = line.strip().split('-')
-            for i in range(start, end+1):
-                    fresh_ingredients.add(i)
-            #fresh_ingredients.update(range(int(start), int(end)+1))
+            fresh_ingredients_ranges.add([int(start), int(end)])
+            continue
 
-    
+    def check_overlap(range1, range2):
+        """
+        Checks if two ranges (tuples) overlap.
+        A range is represented as (start, end).
+        """
+        start1, end1 = range1
+        start2, end2 = range2
+        # They overlap if it's NOT the case that one ends before the other starts
+        # e.g., range1 does not end before range2 starts (end1 < start2)
+        # AND range2 does not end before range1 starts (end2 < start1)
+        return not (end1 < start2 or end2 < start1)
 
+    def merge_ranges(range1, range2):
+        start = min(range1[0], range2[0])
+        end = max(range1[1], range2[1])
+        return [start, end]
+
+    new_ranges = set()
+
+    merge_in_last_iteration = True
+    while(merge_in_last_iteration):
+        merge_in_last_iteration = False
+        n_ranges = len(fresh_ingredients_ranges)
+        for i in range(n_ranges):
+            for j in range(i, n_ranges):
+                if check_overlap(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]):
+                    new_ranges.add(merge_ranges(fresh_ingredients_ranges[i], fresh_ingredients_ranges[j]))
+                    merge_in_last_iteration = True
+                else:
+                    new_ranges.add(fresh_ingredients_ranges[i])
+                    new_ranges.add(fresh_ingredients_ranges[j])
 
             
+    
 
 def menu():
     print("1. Calculate Fibonacci")
