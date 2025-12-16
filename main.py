@@ -496,6 +496,64 @@ def playground_program(input_data_filename = "data/day8_playground_test.txt", ma
     press_enter_to_continue()
 
 
+def playground_program_2(input_data_filename = "data/day8_playground_test.txt", max_distance=10000000.0, n_connections = 1000):
+    import numpy as np
+    from scipy.spatial import KDTree
+    import scipy.sparse as sp
+    import igraph as ig
+
+    # Load points from CSV
+    points = np.genfromtxt(input_data_filename, delimiter=",")
+    if debug:
+        print(f"Loaded {points.shape[0]} points from {input_data_filename}")
+
+    # Create graph and add vertices
+    g = ig.Graph()
+    g.add_vertices(points.shape[0])
+
+    # Calculate distance matrix
+    kd_tree = KDTree(points)
+    sdm = kd_tree.sparse_distance_matrix(kd_tree, max_distance=max_distance)
+
+    # Convert sparse distance matrix to list of edges
+    u_s = []
+    v_s = []
+    d_s = []
+    for item in sdm.items():
+        if item[0][0] < item[0][1]:
+            u_s.append(item[0][0])
+            v_s.append(item[0][1])
+            d_s.append(item[1])
+
+    distances = np.array([u_s, v_s, d_s]).transpose()
+
+    if debug:
+        print(f"distances shape: {distances.shape}")
+
+    sort_indices = distances[:,2].argsort()
+    sorted_distances = distances[sort_indices]
+
+    last_row = None
+    for row in sorted_distances:
+        last_row  = row
+        u = int(row[0])
+        v = int(row[1])
+        d = row[2]
+        g.add_edge(u, v, weight=d)
+        if len(g.components()) == 1:
+            # Everything is connected
+            break
+
+    if debug:
+        print(f"Last added edge to connect everything: {last_row}")
+
+    # Calculate answer
+    answer = points[int(last_row[0])][0] * points[int(last_row[1])][0]
+    print(f"Playground II answer: {answer}")
+
+    press_enter_to_continue()
+
+
 def main_menu():
     from consolemenu import ConsoleMenu
     from consolemenu.items import FunctionItem
@@ -556,6 +614,9 @@ def main_menu():
 
     function_item_15 = FunctionItem("Day 8: Playground", playground_program)
     menu.append_item(function_item_15)
+
+    function_item_16 = FunctionItem("Day 8: Playground - part II", playground_program_2)
+    menu.append_item(function_item_16)
 
     menu.show()
 
