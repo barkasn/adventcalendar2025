@@ -4,6 +4,8 @@ import re
 import itertools
 import copy
 import gc
+from maker import maker
+import argparse
 
 debug = False
 
@@ -414,74 +416,33 @@ def tachyon_manifold_program():
 
 
     
-
-def menu():
-    print("1. Calculate Fibonacci")
-    print("2. Elves Dial")
-    print("3. Elves Dial 0x434C49434B")
-    print("4. Invalid Ids")
-    print("5. Invalid Ids II")
-    print("6. Find Joltage")
-    print("7. Find Joltage II (very slow)")
-    print("8. Forklift Access")
-    print("9. Forklift Access 2")
-    print("10. Ingredients List")
-    print("11. Ingredients List 2")
-    print("12. Cephalopod Math Homework")
-    print("13. Cephalopod Math Homework (not implemented)")
-    print("14. Tachyon Manifold")
-
-
-    print("100. Exit")
-
-def handle_input(choice):
-    if choice == '1':
-        fibonnaci_program()
-    elif choice == '2':
-        elves_dial_program()
-    elif choice == '3':
-        elves_dial_program_2()
-    elif choice == '4':
-        invalid_ids_program()
-    elif choice == '5':
-        invalid_ids_program_2()
-    elif choice == '6':
-        find_joltage_program()
-    elif choice == '7':
-        find_joltage_program_2()
-    elif choice == '8':
-        folklift_access_program()
-    elif choice == '9':
-        folklift_access_program_2()
-    elif choice == '10':
-        ingredients_list_program()
-    elif choice == '11':
-        ingredients_list_program_2()
-    elif choice == '12':
-        cephalopod_math_homework_program()
-    elif choice == '13':
-        cephalopod_math_homework_program_2()
-
-    elif choice == '14':
-        tachyon_manifold_program()
-
-    elif choice == '100':
-        print("Exiting the program.")
-        sys.exit(0)
-    else:
-        print("Invalid choice. Please try again.")
-
-
-def  fibonnaci_program():
-    num = int(input("Enter a number: "))
-    result = fibonnaci(num)
-    print(f"The Fibonacci of {num} is {result}")
-
 def main():
-    while(True):
-        menu()
-        menu_option = input("Choose an option: ")
-        handle_input(menu_option)
+    parser = argparse.ArgumentParser(
+                    prog='Advent of Code 2025 Challenges')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    args = args.parse_args()
+
+    if args.debug:
+        global debug
+        debug = True
+
+    main_menu = maker.Menu()
+    main_menu.heading("adventofcode.com Challenges 2025")
+    main_menu.selection("Elves Dial (day 1 part 1)", elves_dial_program)
+    main_menu.selection("Elves Dial 0x434C49434B (day 1 part 2)", elves_dial_program_2)
+    main_menu.selection("Invalid Ids (day 21 part 1)", invalid_ids_program)
+    main_menu.selection("Invalid Ids II (day 2 part 2)", invalid_ids_program_2)
+    main_menu.selection("Find Joltage  (day 3 part 1)", find_joltage_program)
+    main_menu.selection("Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2)
+    main_menu.selection("Forklift Access  (day 4 part 1)", folklift_access_program)
+    main_menu.selection("Forklift Access 2  (day 4 part 2)", folklift_access_program_2)
+    main_menu.selection("Ingredients List  (day 5 part 1)", ingredients_list_program)
+    main_menu.selection("Ingredients List 2  (day 5 part 2)", ingredients_list_program_2)
+    main_menu.selection("Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program)
+    main_menu.selection("Cephalopod Math Homework (day 6 part 2) NOT WORKING", cephalopod_math_homework_program_2)
+    main_menu.selection("Tachyon Manifold (day 7 part 1)", tachyon_manifold_program)   
+    main_menu.deploy()
+    sys.exit(0)
 
 
 
