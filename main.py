@@ -373,8 +373,44 @@ def cephalopod_math_homework_program():
     print(f"The total of all columns is: {total}")
 
 
+def cephalopod_math_homework_program_2():
+    print("Cephalopod Math Homework 2 is not yet implemented.")
         
-        
+
+def tachyon_manifold_program():
+
+    mode = 'initialize'
+
+    n_splits = 0
+
+    tachyon_positions = set()
+    new_tachyon_positions = set()
+
+    for line in open('tachyon_manifold.txt', 'r'):
+        line_array = list(line.strip())
+
+        print(line_array)
+
+        if mode == 'initialize':
+            tachyon_positions = [i for i, x in enumerate(line_array) if x == 'S']
+            mode = 'propagate'
+            continue
+        elif mode == 'propagate':
+            
+            for i in tachyon_positions:
+                if line_array[i] == '^':
+                    new_tachyon_positions.add(i - 1)
+                    new_tachyon_positions.add(i + 1)
+                    new_tachyon_positions.remove(i)
+                    n_splits += 1
+
+                elif line_array[i] == '.':
+                    new_tachyon_positions.add(i)
+
+            tachyon_positions = copy.deepcopy(new_tachyon_positions)
+            continue
+    
+    print(f"The tachyon manifold caused {n_splits} splits.")
 
 
     
@@ -392,7 +428,8 @@ def menu():
     print("10. Ingredients List")
     print("11. Ingredients List 2")
     print("12. Cephalopod Math Homework")
-
+    print("13. Cephalopod Math Homework (not implemented)")
+    print("14. Tachyon Manifold")
 
 
     print("100. Exit")
@@ -422,6 +459,11 @@ def handle_input(choice):
         ingredients_list_program_2()
     elif choice == '12':
         cephalopod_math_homework_program()
+    elif choice == '13':
+        cephalopod_math_homework_program_2()
+
+    elif choice == '14':
+        tachyon_manifold_program()
 
     elif choice == '100':
         print("Exiting the program.")
