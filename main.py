@@ -1,4 +1,3 @@
-
 import sys
 import re
 import itertools
@@ -15,47 +14,46 @@ def elves_dial_program():
     start_position = 50
     n_times_pointing_zero = 0
 
-    filename = 'data/elves_rotations.txt'
+    filename = "data/elves_rotations.txt"
 
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         for line in file:
             rotation = line.strip()
             direction = rotation[0]
             steps = int(rotation[1:])
 
-            if direction == 'L':
+            if direction == "L":
                 start_position = (start_position - steps) % 100
-            elif direction == 'R':
+            elif direction == "R":
                 start_position = (start_position + steps) % 100
             else:
                 print(f"Invalid direction '{direction}' in line: {line}")
                 continue
-            
+
             if start_position == 0:
                 n_times_pointing_zero += 1
 
     print(f"The dial pointed to 0 a total of {n_times_pointing_zero} times.")
 
 
-
 def elves_dial_program_2():
     start_position = 50
     n_times_pointing_zero = 0
 
-    filename = 'data/elves_rotations.txt'
-    with open(filename, 'r') as file:
+    filename = "data/elves_rotations.txt"
+    with open(filename, "r") as file:
         for line in file:
             rotation = line.strip()
             direction = rotation[0]
             steps = int(rotation[1:])
 
-            if direction == 'L':
+            if direction == "L":
                 while steps > 0:
                     start_position = (start_position - 1) % 100
                     steps -= 1
                     if start_position == 0:
                         n_times_pointing_zero += 1
-            elif direction == 'R':
+            elif direction == "R":
                 while steps > 0:
                     start_position = (start_position + 1) % 100
                     steps -= 1
@@ -65,12 +63,15 @@ def elves_dial_program_2():
             else:
                 print(f"Invalid direction '{direction}' in line: {line}")
                 continue
-            
-    print(f"The dial pointed to 0 a total of {n_times_pointing_zero} times using method 0x434C49434B.")
+
+    print(
+        f"The dial pointed to 0 a total of {n_times_pointing_zero} times using method 0x434C49434B."
+    )
+
 
 def invalid_ids_program():
     invalid_ids_running_sum = 0
-    invalid_ids_filename = 'data/invalid_ids.txt'
+    invalid_ids_filename = "data/invalid_ids.txt"
 
     def is_invalid_id(id):
         str_id = str(id)
@@ -81,13 +82,13 @@ def invalid_ids_program():
 
         return False
 
-    with open(invalid_ids_filename, 'r') as file:
+    with open(invalid_ids_filename, "r") as file:
         line = file.readline()
-        ranges_list = line.split(',')
+        ranges_list = line.split(",")
         for r in ranges_list:
-            start, end = map(int, r.split('-'))
+            start, end = map(int, r.split("-"))
             for i in range(start, end + 1):
-                if(is_invalid_id(i)):
+                if is_invalid_id(i):
                     invalid_ids_running_sum = invalid_ids_running_sum + i
 
     print(f"The sum of all invalid IDs is: {invalid_ids_running_sum}")
@@ -95,7 +96,7 @@ def invalid_ids_program():
 
 def invalid_ids_program_2():
     invalid_ids_running_sum = 0
-    invalid_ids_filename = 'data/invalid_ids.txt'
+    invalid_ids_filename = "data/invalid_ids.txt"
 
     def is_invalid_id(id):
         str_id = str(id)
@@ -108,20 +109,20 @@ def invalid_ids_program_2():
 
         return False
 
-    with open(invalid_ids_filename, 'r') as file:
+    with open(invalid_ids_filename, "r") as file:
         line = file.readline()
-        ranges_list = line.split(',')
+        ranges_list = line.split(",")
         for r in ranges_list:
-            start, end = map(int, r.split('-'))
+            start, end = map(int, r.split("-"))
             for i in range(start, end + 1):
-                if(is_invalid_id(i)):
+                if is_invalid_id(i):
                     invalid_ids_running_sum = invalid_ids_running_sum + i
 
     print(f"The sum of all invalid IDs is: {invalid_ids_running_sum}")
 
 
 def find_joltage_program():
-    joltage_filename = 'data/joltage_input.txt'
+    joltage_filename = "data/joltage_input.txt"
     total_output_joltage = 0
 
     def find_max_joltage(joltage_rating):
@@ -137,18 +138,18 @@ def find_joltage_program():
         max_joltage = max(possible_values)
         return max_joltage
 
-    with open(joltage_filename, 'r') as file:
+    with open(joltage_filename, "r") as file:
         for line in file:
             joltage_rating = int(line.strip())
-            total_output_joltage = total_output_joltage + find_max_joltage(joltage_rating)
+            total_output_joltage = total_output_joltage + find_max_joltage(
+                joltage_rating
+            )
 
     print(f"The total output joltage is: {total_output_joltage}")
 
 
-
-
 def find_joltage_program_2():
-    joltage_filename = 'data/joltage_input.txt'
+    joltage_filename = "data/joltage_input.txt"
     total_output_joltage = 0
 
     def find_max_joltage_2(joltage_rating):
@@ -157,23 +158,25 @@ def find_joltage_program_2():
 
         # This works, but is extremely slow
         # Need to find a better way to do this
-        for i in itertools.combinations(list(range(len(str_jr))),12):
-            v = int(''.join([str_jr[index] for index in i]))
+        for i in itertools.combinations(list(range(len(str_jr))), 12):
+            v = int("".join([str_jr[index] for index in i]))
             if v > max_joltage:
                 max_joltage = v
         return max_joltage
 
-    print("Calculating total output joltage..", end='', flush=True)
-    with open(joltage_filename, 'r') as file:
+    print("Calculating total output joltage..", end="", flush=True)
+    with open(joltage_filename, "r") as file:
         for line in file:
-            print(".", end='', flush=True)
-            total_output_joltage = total_output_joltage + find_max_joltage_2(line.strip())
+            print(".", end="", flush=True)
+            total_output_joltage = total_output_joltage + find_max_joltage_2(
+                line.strip()
+            )
 
     print(f"The total output joltage is: {total_output_joltage}")
 
 
 def folklift_access_program():
-    input_filename = 'data/forklift_access_input.txt'
+    input_filename = "data/forklift_access_input.txt"
 
     working_floor = []
     line_length = 0
@@ -181,7 +184,7 @@ def folklift_access_program():
     accessible_rolls = 0
 
     # Load data
-    with open(input_filename, 'r') as file:
+    with open(input_filename, "r") as file:
         for line in file:
             line_array = list(line.strip())
             if line_length == 0:
@@ -193,17 +196,25 @@ def folklift_access_program():
             n_lines += 1
 
     output_floor = copy.deepcopy(working_floor)
-    
 
     def check_is_roll(i, j):
-        if working_floor[i][j] == '@':
+        if working_floor[i][j] == "@":
             return True
-        return False    
+        return False
 
     def check_if_accessible(i, j):
         n_surrounding_roles = 0
 
-        directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
+        directions = [
+            (-1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
+            (1, 0),
+            (1, 1),
+            (0, 1),
+            (-1, 1),
+        ]
         for direction in directions:
             ni, nj = i + direction[0], j + direction[1]
             if 0 <= ni < n_lines and 0 <= nj < line_length:
@@ -216,20 +227,20 @@ def folklift_access_program():
 
     for i in range(n_lines):
         for j in range(line_length):
-            if check_is_roll(i,j):
+            if check_is_roll(i, j):
                 if check_if_accessible(i, j):
-                    output_floor[i][j] = 'x'  # Mark as accessible
+                    output_floor[i][j] = "x"  # Mark as accessible
                     accessible_rolls += 1
 
     print(f"Number of accessible forklift rolls: {accessible_rolls}")
 
     if debug:
         for row in output_floor:
-            print(' '.join(row))
+            print(" ".join(row))
 
 
 def folklift_access_program_2():
-    input_filename = 'data/forklift_access_input.txt'
+    input_filename = "data/forklift_access_input.txt"
 
     total_removable_rolls = 0
 
@@ -239,7 +250,7 @@ def folklift_access_program_2():
     accessible_rolls = 0
 
     # Load data
-    with open(input_filename, 'r') as file:
+    with open(input_filename, "r") as file:
         for line in file:
             line_array = list(line.strip())
             if line_length == 0:
@@ -251,17 +262,25 @@ def folklift_access_program_2():
             n_lines += 1
 
     output_floor = copy.deepcopy(working_floor)
-    
 
     def check_is_roll(i, j):
-        if working_floor[i][j] == '@':
+        if working_floor[i][j] == "@":
             return True
-        return False    
+        return False
 
     def check_if_accessible(i, j):
         n_surrounding_roles = 0
 
-        directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
+        directions = [
+            (-1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
+            (1, 0),
+            (1, 1),
+            (0, 1),
+            (-1, 1),
+        ]
         for direction in directions:
             ni, nj = i + direction[0], j + direction[1]
             if 0 <= ni < n_lines and 0 <= nj < line_length:
@@ -279,9 +298,9 @@ def folklift_access_program_2():
 
         for i in range(n_lines):
             for j in range(line_length):
-                if check_is_roll(i,j):
+                if check_is_roll(i, j):
                     if check_if_accessible(i, j):
-                        output_floor[i][j] = '.'  # Mark as removed in the output
+                        output_floor[i][j] = "."  # Mark as removed in the output
                         accessible_rolls += 1
                         rolls_removed = True
 
@@ -293,47 +312,47 @@ def folklift_access_program_2():
 
 
 def ingredients_list_program():
-    input_filename = 'data/ingredients_list.txt'
+    input_filename = "data/ingredients_list.txt"
     fresh_ingredients_ranges = list()
     n_fresh_ingredients = 0
-    mode = 'read_fresh'
+    mode = "read_fresh"
 
-
-    for line in open(input_filename, 'r'):
-        if line.strip() == '':
-            mode = 'read_available'
+    for line in open(input_filename, "r"):
+        if line.strip() == "":
+            mode = "read_available"
             continue
-        elif mode == 'read_fresh':
-            [start, end] = line.strip().split('-')
+        elif mode == "read_fresh":
+            [start, end] = line.strip().split("-")
             fresh_ingredients_ranges.append([int(start), int(end)])
             continue
-        elif mode == 'read_available':
+        elif mode == "read_available":
             ingredient = int(line.strip())
             ingredient_is_fresh = False
             for r in fresh_ingredients_ranges:
                 if ingredient >= r[0] and ingredient <= r[1]:
                     if debug:
-                        print(f'Ingredient {ingredient} is fresh')
+                        print(f"Ingredient {ingredient} is fresh")
                     ingredient_is_fresh = True
             if ingredient_is_fresh:
                 n_fresh_ingredients += 1
 
     print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
 
+
 def ingredients_list_program_2():
     from intervaltree import Interval, IntervalTree
 
-    input_filename = 'data/ingredients_list.txt'
+    input_filename = "data/ingredients_list.txt"
 
-    mode = 'read_fresh'
+    mode = "read_fresh"
     fresh_intervals = IntervalTree()
-    for line in open(input_filename, 'r'):
-        if line.strip() == '':
-            mode = 'read_available'
+    for line in open(input_filename, "r"):
+        if line.strip() == "":
+            mode = "read_available"
             continue
-        elif mode == 'read_fresh':
-            [start, end] = line.strip().split('-')
-            fresh_intervals.add(Interval(int(start),int(end)+1))
+        elif mode == "read_fresh":
+            [start, end] = line.strip().split("-")
+            fresh_intervals.add(Interval(int(start), int(end) + 1))
             continue
 
     # Merge overlaps
@@ -345,14 +364,15 @@ def ingredients_list_program_2():
 
     print(f"Total fresh ingredient count {total_fresh_ingredients}")
 
+
 def cephalopod_math_homework_program():
-    input_file_name = 'data/cephalopod_math_homework.txt'
+    input_file_name = "data/cephalopod_math_homework.txt"
 
     from collections import defaultdict
 
     data = defaultdict(list)
 
-    for line in open(input_file_name, 'r'):
+    for line in open(input_file_name, "r"):
         entries = enumerate(line.strip().split())
         for index, entry in entries:
             data[index].append(entry)
@@ -372,50 +392,46 @@ def cephalopod_math_homework_program():
 
 def cephalopod_math_homework_program_2():
     print("Cephalopod Math Homework 2 is not yet implemented.")
-        
+
 
 def tachyon_manifold_program():
-
-    mode = 'initialize'
+    mode = "initialize"
 
     n_splits = 0
 
     tachyon_positions = set()
     new_tachyon_positions = set()
 
-    for line in open('data/tachyon_manifold.txt', 'r'):
+    for line in open("data/tachyon_manifold.txt", "r"):
         line_array = list(line.strip())
 
         if debug:
             print(line_array)
 
-        if mode == 'initialize':
-            tachyon_positions = [i for i, x in enumerate(line_array) if x == 'S']
-            mode = 'propagate'
+        if mode == "initialize":
+            tachyon_positions = [i for i, x in enumerate(line_array) if x == "S"]
+            mode = "propagate"
             continue
-        elif mode == 'propagate':
-            
+        elif mode == "propagate":
             for i in tachyon_positions:
-                if line_array[i] == '^':
+                if line_array[i] == "^":
                     new_tachyon_positions.add(i - 1)
                     new_tachyon_positions.add(i + 1)
                     new_tachyon_positions.remove(i)
                     n_splits += 1
 
-                elif line_array[i] == '.':
+                elif line_array[i] == ".":
                     new_tachyon_positions.add(i)
 
             tachyon_positions = copy.deepcopy(new_tachyon_positions)
             continue
-    
+
     print(f"The tachyon manifold caused {n_splits} splits.")
 
 
-    
 def main():
-    parser = argparse.ArgumentParser(
-                    prog='Advent of Code 2025 Challenges')
-    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    parser = argparse.ArgumentParser(prog="Advent of Code 2025 Challenges")
+    parser.add_argument("--debug", action="store_true", help="Enable debug mode")
     args = parser.parse_args()
 
     if args.debug:
@@ -429,17 +445,25 @@ def main():
     main_menu.selection("Invalid Ids (day 21 part 1)", invalid_ids_program)
     main_menu.selection("Invalid Ids II (day 2 part 2)", invalid_ids_program_2)
     main_menu.selection("Find Joltage  (day 3 part 1)", find_joltage_program)
-    main_menu.selection("Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2)
+    main_menu.selection(
+        "Find Joltage II (very slow) (day 3 part 2)", find_joltage_program_2
+    )
     main_menu.selection("Forklift Access  (day 4 part 1)", folklift_access_program)
     main_menu.selection("Forklift Access 2  (day 4 part 2)", folklift_access_program_2)
     main_menu.selection("Ingredients List  (day 5 part 1)", ingredients_list_program)
-    main_menu.selection("Ingredients List 2  (day 5 part 2)", ingredients_list_program_2)
-    main_menu.selection("Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program)
-    main_menu.selection("Cephalopod Math Homework (day 6 part 2) NOT WORKING", cephalopod_math_homework_program_2)
-    main_menu.selection("Tachyon Manifold (day 7 part 1)", tachyon_manifold_program)   
+    main_menu.selection(
+        "Ingredients List 2  (day 5 part 2)", ingredients_list_program_2
+    )
+    main_menu.selection(
+        "Cephalopod Math Homework  (day 6 part 1)", cephalopod_math_homework_program
+    )
+    main_menu.selection(
+        "Cephalopod Math Homework (day 6 part 2) NOT WORKING",
+        cephalopod_math_homework_program_2,
+    )
+    main_menu.selection("Tachyon Manifold (day 7 part 1)", tachyon_manifold_program)
     main_menu.deploy()
     sys.exit(0)
-
 
 
 if __name__ == "__main__":
