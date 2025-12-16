@@ -347,6 +347,32 @@ def ingredients_list_program_2():
         total_fresh_ingredients += interval_obj.end - interval_obj.begin
 
     print(f"Total fresh ingredient count {total_fresh_ingredients}")
+
+def cephalopod_math_homework_program():
+    input_file_name = 'cephalopod_math_homework.txt'
+
+    from collections import defaultdict
+
+    data = defaultdict(list)
+
+    for line in open(input_file_name, 'r'):
+        entries = enumerate(line.strip().split())
+        for index, entry in entries:
+            data[index].append(int(entry))
+
+    for index in data:
+        column_data = data[index][:-1]
+        column_operation = str(data[index][-1])
+
+        op = column_operation.join(column_data)
+
+        print(f"Column {index}: Operation {column_operation} Result {op}")
+
+
+        
+        
+
+
     
 
 def menu():
@@ -361,6 +387,7 @@ def menu():
     print("9. Forklift Access 2")
     print("10. Ingredients List")
     print("11. Ingredients List 2")
+    print("12. Cephalopod Math Homework")
 
 
 
@@ -389,6 +416,8 @@ def handle_input(choice):
         ingredients_list_program()
     elif choice == '11':
         ingredients_list_program_2()
+    elif choice == '12":
+        cephalopod_math_homework_program()
 
     elif choice == '100':
         print("Exiting the program.")
