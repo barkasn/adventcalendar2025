@@ -334,7 +334,9 @@ def ingredients_list_program_2():
             continue
         elif mode == 'read_fresh':
             [start, end] = line.strip().split('-')
-            fresh_ingredients.update(list(range(start, end+1)))
+            for i in range(start, end+1):
+                    fresh_ingredients.add(i)
+            #fresh_ingredients.update(range(int(start), int(end)+1))
 
     
 
