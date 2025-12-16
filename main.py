@@ -121,13 +121,68 @@ def invalid_ids_program_2():
     print(f"The sum of all invalid IDs is: {invalid_ids_running_sum}")
 
 
+def find_joltage_program():
+    joltage_filename = 'joltage_input.txt'
+    total_output_joltage = 0
+
+    def find_max_joltage(joltage_rating):
+        str_jr = str(joltage_rating)
+
+        possible_values = []
+
+        for i in range(len(str_jr)):
+            for j in range(i + 1, len(str_jr)):
+                v = str_jr[i] + str_jr[j]
+                possible_values.append(int(v))
+
+        max_joltage = max(possible_values)
+        return max_joltage
+
+    with open(joltage_filename, 'r') as file:
+        for line in file:
+            joltage_rating = int(line.strip())
+            total_output_joltage = total_output_joltage + find_max_joltage(joltage_rating)
+
+    print(f"The total output joltage is: {total_output_joltage}")
+
+
+
+
+
+
+def find_joltage_program_2():
+    joltage_filename = 'joltage_input.txt'
+    total_output_joltage = 0
+
+    def find_max_joltage_2(joltage_rating):
+        str_jr = str(joltage_rating)
+
+        possible_values = []
+        
+        import itertools
+        for i in itertools.combinations(range(len(str_jr)),12):
+            v = ''.join([str_jr[index] for index in i])
+            if v:
+                possible_values.append(int(v))
+        max_joltage = max(possible_values)
+        return max_joltage
+
+    with open(joltage_filename, 'r') as file:
+        for line in file:
+            joltage_rating = int(line.strip())
+            total_output_joltage = total_output_joltage + find_max_joltage_2(joltage_rating)
+
+    print(f"The total output joltage is: {total_output_joltage}")
+
 def menu():
     print("1. Calculate Fibonacci")
     print("2. Elves Dial")
     print("3. Elves Dial 0x434C49434B")
     print("4. Invalid Ids")
     print("5. Invalid Ids II")
-    print("6. Exit")
+    print("6. Find Joltage")
+    print("7. Find Joltage II")
+    print("8. Exit")
 
 def handle_input(choice):
     if choice == '1':
@@ -141,6 +196,10 @@ def handle_input(choice):
     elif choice == '5':
         invalid_ids_program_2()
     elif choice == '6':
+        find_joltage_program()
+    elif choice == '7':
+        find_joltage_program_2()
+    elif choice == '8':
         print("Exiting the program.")
         sys.exit(0)
     else:
