@@ -301,23 +301,44 @@ def ingredients_list_program():
     n_fresh_ingredients = 0
     mode = 'read_fresh'
 
-    with open(input_filename, 'r') as file:
-        for line in file:
-            if line.strip() == '':
-                mode = 'read_available'
-                continue
-            if mode == 'read_fresh':
-                [start, end] = line.strip().split('-')
-                fresh_ingredients_ranges.append([start, end])
-            elif mode == 'read_available':
-                ingredient = int(line.strip())
-                for r in fresh_ingredients_ranges:
-                    if ingredient >= r[0] and ingredient <= r[1]:
-                        n_fresh_ingredients += 1
+
+    for line in open(input_filename, 'r'):
+        if line.strip() == '':
+            mode = 'read_available'
+            continue
+        elif mode == 'read_fresh':
+            [start, end] = line.strip().split('-')
+            fresh_ingredients_ranges.append([int(start), int(end)])
+            continue
+        elif mode == 'read_available':
+            ingredient = int(line.strip())
+            ingredient_is_fresh = False
+            for r in fresh_ingredients_ranges:
+                if ingredient >= r[0] and ingredient <= r[1]:
+                    print(f'Ingredient {ingredient} is fresh')
+                    ingredient_is_fresh = True
+            if ingredient_is_fresh:
+                n_fresh_ingredients += 1
 
     print(f"Number of fresh ingredients available: {n_fresh_ingredients}")
 
+def ingredients_list_program_2():
+    input_filename = 'ingredients_list.txt'
+    fresh_ingredients = set()
+
+    mode = 'read_fresh'
+
+    for line in open(input_filename, 'r'):
+        if line.strip() == '':
+            mode = 'read_available'
+            continue
+        elif mode == 'read_fresh':
+            [start, end] = line.strip().split('-')
+            fresh_ingredients.update(list(range(start, end+1)))
+
     
+
+
             
 
 def menu():
@@ -331,6 +352,7 @@ def menu():
     print("8. Forklift Access")
     print("9. Forklift Access 2")
     print("10. Ingredients List")
+    print("11. Ingredients List 2")
 
 
 
@@ -357,6 +379,8 @@ def handle_input(choice):
         folklift_access_program_2()
     elif choice == '10':
         ingredients_list_program()
+    elif choice == '11':
+        ingredients_list_program_2()
 
     elif choice == '100':
         print("Exiting the program.")
