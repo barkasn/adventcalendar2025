@@ -157,14 +157,13 @@ def find_joltage_program_2():
     def find_max_joltage_2(joltage_rating):
         str_jr = str(joltage_rating)
 
-        possible_values = []
-        
+        max_joltage = 0
+
         import itertools
         for i in itertools.combinations(range(len(str_jr)),12):
             v = ''.join([str_jr[index] for index in i])
-            if v:
-                possible_values.append(int(v))
-        max_joltage = max(possible_values)
+            if v > max_value:
+                max_value = v
         return max_joltage
 
     with open(joltage_filename, 'r') as file:
