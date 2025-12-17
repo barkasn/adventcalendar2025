@@ -560,6 +560,106 @@ def playground_program_2(
 
     press_enter_to_continue()
 
+def red_tiles_program(filename="data/red_tiles_input.txt"):
+
+    tile_coordinates = list()
+
+    # Load data
+    for line in open(filename, "r"):
+        [x,y] = line.strip().split(",")
+        tile_coordinates.append( (int(x), int(y)) )
+
+    # Naive approach comparing all combinations
+    max_surface_area = 0
+    combinations_of_two = itertools.combinations(tile_coordinates, 2)
+
+    for (x1, y1), (x2, y2) in combinations_of_two:
+        surface_area = abs(x1 - x2+1) * abs(y1 - y2+1)
+        if surface_area > max_surface_area:
+            max_surface_area = surface_area
+
+    print(f"The maximum surface area of red tiles is: {max_surface_area}")
+    
+    press_enter_to_continue()   
+
+
+
+def factory_program(input_file = "data/day10_factory_data.txt"):
+    import igraph as ig
+
+    def state_string_to_int(state_string):
+        digits_text = list(re.findall(r'[\.#]+', state_string)[0])
+        map_dict = {'.': '0', '#': '1'}
+        state_in_binary = ''.join([map_dict[item] for item in digits_text])
+        state = int(''.join(reversed(state_in_binary)), 2)
+
+        return state
+
+    def get_max_state(state_string):
+        digits_text = list(re.findall(r'[\.#]+', state_string)[0])
+        return pow(2,len(digits_text))
+
+    def apply_transition_to_state(state: int, transition: list[int]):
+        pass
+
+    def tuple_string_to_bits(s: str) -> int:
+        # Remove parentheses and whitespace
+        s = s.strip()[1:-1]
+        bits = 0
+        for n in s.split(','):
+            bits |= 1 << int(n)
+        return bits
+
+    def process_factory_line(line):
+        # Parse line with regex
+        capture_pattern = r"^(\[.*\]) (\(.*\)) (\{.*\})$"
+        target_state_string, button_presses_string, joltage_string = re.findall(capture_pattern, line)[0]
+
+        target_state_int = state_string_to_int(target_state_string)
+        max_state = get_max_state(target_state_string)
+ 
+        if debug:
+            print(f"target_state_string: {target_state_string}")
+            print(f"button_presses_string: {button_presses_string}")
+            print(f"joltage_string: {joltage_string}")
+            print("---")
+            print(f"target_state_int: {target_state_int}")
+            print(f"max_state: {max_state}")
+            print("---")
+
+        # Parse transitions
+        transitions = [tuple_string_to_bits(x) for x in button_presses_string.split(' ')]
+
+        if debug:
+            print("Transitions: ")
+            print(transitions)
+
+        # Generate igraph object with states
+        g = ig.Graph()
+        g.add_vertices(max_state)
+
+        # For each state
+        for v in g.vs:
+            cur_index = v.index
+            # For each button
+            for t in transitions:
+                to_index = cur_index ^ t # bitwise xor
+                # Add transition
+                if not g.are_adjacent(cur_index, to_index):
+                    g.add_edge(cur_index, to_index)
+            
+        # Use igraph g.get_shortest_paths() to find shortest path from initial to target state
+        n_button_presses = len(g.get_shortest_paths(0, target_state_int)[0]) -1
+        return(n_button_presses)
+
+    total_button_presses = 0
+    for line in open(input_file, "r"):
+        line = line.strip()
+        total_button_presses += process_factory_line(line)
+
+    print(f"The sum of the minimum number of button presses is: {total_button_presses}")
+
+    press_enter_to_continue()
 
 def main_menu():
     from consolemenu import ConsoleMenu
@@ -629,6 +729,19 @@ def main_menu():
 
     function_item_16 = FunctionItem("Day 8: Playground - part II", playground_program_2)
     menu.append_item(function_item_16)
+
+    function_item_17 = FunctionItem("Day 9: Red Tiles - part I", red_tiles_program)
+    menu.append_item(function_item_17)
+
+    function_item_18 = FunctionItem(
+        "Day 9: Red Tiles - part II - NOT WORKING", None
+    )
+    menu.append_item(function_item_18)
+
+    function_item_19 = FunctionItem("Day 10: Factory - Part I", factory_program)
+    menu.append_item(function_item_19)
+
+
 
     menu.show()
 
