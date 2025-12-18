@@ -722,6 +722,31 @@ def factory_program_2(input_file="data/day10_factory_data.txt"):
     press_enter_to_continue()
 
 
+def reactor_program(input_file = 'data/day11_reactor_data.txt'):
+    import igraph as ig
+
+    g = ig.Graph(directed=True)
+
+    for line in open(input_file, 'r'):
+        origin_node, target_nodes= [x.strip() for x in line.strip().split(':')]
+        target_nodes_list = [x for x in target_nodes.split(' ')]
+
+        if origin_node not in g.vs:
+            g.add_vertex(origin_node)
+
+        for target_node in target_nodes_list:
+            if target_node not in g.vs:
+                g.add_vertex(target_node)
+
+            if not g.are_adjacent(origin_node, target_node):
+                g.add_edge(origin_node, target_node)
+
+    n_simple_paths = len(g.get_all_simple_paths('you','out'))
+
+    print(f"Number of simple paths: {n_simple_paths}")
+
+    press_enter_to_continue()
+
 def main_menu():
     from consolemenu import ConsoleMenu
     from consolemenu.items import FunctionItem
@@ -802,6 +827,9 @@ def main_menu():
 
     function_item_20 = FunctionItem("Day 10: Factory - Part II", factory_program_2)
     menu.append_item(function_item_20)
+
+    function_item_21 = FunctionItem("Day 11: Reactor - Part I", reactor_program)
+    menu.append_item(function_item_21)
 
     menu.show()
 
