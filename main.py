@@ -727,23 +727,113 @@ def reactor_program(input_file = 'data/day11_reactor_data.txt'):
 
     g = ig.Graph(directed=True)
 
+    def find_node_by_name(g, name):
+        try:
+            g.vs.find(name=name)
+            return True
+        except:
+            return False
+
+    print('Generating graph...')
     for line in open(input_file, 'r'):
         origin_node, target_nodes= [x.strip() for x in line.strip().split(':')]
         target_nodes_list = [x for x in target_nodes.split(' ')]
 
-        if origin_node not in g.vs:
+        if not find_node_by_name(g, origin_node):
             g.add_vertex(origin_node)
 
         for target_node in target_nodes_list:
-            if target_node not in g.vs:
+            if not find_node_by_name(g, target_node):
                 g.add_vertex(target_node)
 
             if not g.are_adjacent(origin_node, target_node):
-                g.add_edge(origin_node, target_node)
+                g.add_edge(g.vs.find(origin_node), g.vs.find(target_node))
 
     n_simple_paths = len(g.get_all_simple_paths('you','out'))
 
     print(f"Number of simple paths: {n_simple_paths}")
+
+    press_enter_to_continue()
+
+
+def reactor_program_2(input_file = 'data/day11_reactor_data.txt'):
+    import igraph as ig
+    from collections import deque
+
+    g = ig.Graph(directed=True)
+
+    def find_node_by_name(g, name):
+        try:
+            g.vs.find(name=name)
+            return True
+        except:
+            return False
+
+    print('Generating graph...')
+    for line in open(input_file, 'r'):
+        origin_node, target_nodes= [x.strip() for x in line.strip().split(':')]
+        target_nodes_list = [x for x in target_nodes.split(' ')]
+
+        if not find_node_by_name(g, origin_node):
+            g.add_vertex(origin_node)
+
+        for target_node in target_nodes_list:
+            if not find_node_by_name(g, target_node):
+                g.add_vertex(target_node)
+
+            if not g.are_adjacent(origin_node, target_node):
+                g.add_edge(g.vs.find(origin_node), g.vs.find(target_node))
+
+
+    print('Finding paths...')
+
+    svr_node = g.vs.find('svr')
+    out_node = g.vs.find('out')
+
+    # mandatory nodes
+    fft_node = g.vs.find('fft')
+    dac_node = g.vs.find('dac')
+
+    # From ChatGPT with some simplifications
+    def all_simple_paths_covering_required(g, s, t, required):
+        n = g.vcount()
+
+        # Mask for visited nodes
+        idx = {v:i for i, v in enumerate(required)}
+        full_mask = (1 << len(required)) - 1
+        def bit(v):
+            return 1 << idx[v] if v in idx else 0
+
+        results = []
+        path = [s]
+        visited = [False] * n
+        visited[s] = True
+
+        def dfs(u, mask):
+            if u == t:
+                if mask == full_mask:
+                    results.append(path.copy())
+                    print(f'{len(results)} paths found')
+                return
+
+            for v in g.neighbors(u, mode='out'):
+                if visited[v]:
+                    continue
+
+                visited[v] = True
+                path.append(v)
+                dfs(v, mask | bit(v))
+                path.pop()
+                visited[v] = False
+
+        dfs(s, bit(s))
+        return results
+
+    # Find paths
+    paths = all_simple_paths_covering_required(g, svr_node.index, out_node.index, (fft_node.index, dac_node.index))
+
+    n_paths = len(paths)
+    print(f"Number of valid paths: {n_paths}")
 
     press_enter_to_continue()
 
@@ -830,6 +920,9 @@ def main_menu():
 
     function_item_21 = FunctionItem("Day 11: Reactor - Part I", reactor_program)
     menu.append_item(function_item_21)
+
+    function_item_22 = FunctionItem("Day 11: Reactor - Part II - SLOW", reactor_program_2)
+    menu.append_item(function_item_22)
 
     menu.show()
 
