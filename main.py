@@ -560,44 +560,43 @@ def playground_program_2(
 
     press_enter_to_continue()
 
-def red_tiles_program(filename="data/red_tiles_input.txt"):
 
+def red_tiles_program(filename="data/red_tiles_input.txt"):
     tile_coordinates = list()
 
     # Load data
     for line in open(filename, "r"):
-        [x,y] = line.strip().split(",")
-        tile_coordinates.append( (int(x), int(y)) )
+        [x, y] = line.strip().split(",")
+        tile_coordinates.append((int(x), int(y)))
 
     # Naive approach comparing all combinations
     max_surface_area = 0
     combinations_of_two = itertools.combinations(tile_coordinates, 2)
 
     for (x1, y1), (x2, y2) in combinations_of_two:
-        surface_area = abs(x1 - x2+1) * abs(y1 - y2+1)
+        surface_area = abs(x1 - x2 + 1) * abs(y1 - y2 + 1)
         if surface_area > max_surface_area:
             max_surface_area = surface_area
 
     print(f"The maximum surface area of red tiles is: {max_surface_area}")
-    
-    press_enter_to_continue()   
+
+    press_enter_to_continue()
 
 
-
-def factory_program(input_file = "data/day10_factory_data.txt"):
+def factory_program(input_file="data/day10_factory_data.txt"):
     import igraph as ig
 
     def state_string_to_int(state_string):
-        digits_text = list(re.findall(r'[\.#]+', state_string)[0])
-        map_dict = {'.': '0', '#': '1'}
-        state_in_binary = ''.join([map_dict[item] for item in digits_text])
-        state = int(''.join(reversed(state_in_binary)), 2)
+        digits_text = list(re.findall(r"[\.#]+", state_string)[0])
+        map_dict = {".": "0", "#": "1"}
+        state_in_binary = "".join([map_dict[item] for item in digits_text])
+        state = int("".join(reversed(state_in_binary)), 2)
 
         return state
 
     def get_max_state(state_string):
-        digits_text = list(re.findall(r'[\.#]+', state_string)[0])
-        return pow(2,len(digits_text))
+        digits_text = list(re.findall(r"[\.#]+", state_string)[0])
+        return pow(2, len(digits_text))
 
     def apply_transition_to_state(state: int, transition: list[int]):
         pass
@@ -606,18 +605,20 @@ def factory_program(input_file = "data/day10_factory_data.txt"):
         # Remove parentheses and whitespace
         s = s.strip()[1:-1]
         bits = 0
-        for n in s.split(','):
+        for n in s.split(","):
             bits |= 1 << int(n)
         return bits
 
     def process_factory_line(line):
         # Parse line with regex
         capture_pattern = r"^(\[.*\]) (\(.*\)) (\{.*\})$"
-        target_state_string, button_presses_string, joltage_string = re.findall(capture_pattern, line)[0]
+        target_state_string, button_presses_string, joltage_string = re.findall(
+            capture_pattern, line
+        )[0]
 
         target_state_int = state_string_to_int(target_state_string)
         max_state = get_max_state(target_state_string)
- 
+
         if debug:
             print(f"target_state_string: {target_state_string}")
             print(f"button_presses_string: {button_presses_string}")
@@ -628,7 +629,9 @@ def factory_program(input_file = "data/day10_factory_data.txt"):
             print("---")
 
         # Parse transitions
-        transitions = [tuple_string_to_bits(x) for x in button_presses_string.split(' ')]
+        transitions = [
+            tuple_string_to_bits(x) for x in button_presses_string.split(" ")
+        ]
 
         if debug:
             print("Transitions: ")
@@ -643,14 +646,14 @@ def factory_program(input_file = "data/day10_factory_data.txt"):
             cur_index = v.index
             # For each button
             for t in transitions:
-                to_index = cur_index ^ t # bitwise xor
+                to_index = cur_index ^ t  # bitwise xor
                 # Add transition
                 if not g.are_adjacent(cur_index, to_index):
                     g.add_edge(cur_index, to_index)
-            
+
         # Use igraph g.get_shortest_paths() to find shortest path from initial to target state
-        n_button_presses = len(g.get_shortest_paths(0, target_state_int)[0]) -1
-        return(n_button_presses)
+        n_button_presses = len(g.get_shortest_paths(0, target_state_int)[0]) - 1
+        return n_button_presses
 
     total_button_presses = 0
     for line in open(input_file, "r"):
@@ -662,52 +665,52 @@ def factory_program(input_file = "data/day10_factory_data.txt"):
     press_enter_to_continue()
 
 
-def factory_program_2(input_file = "data/day10_factory_data.txt"):
-    import igraph as ig
-    from bidict import bidict
+def factory_program_2(input_file="data/day10_factory_data.txt"):
     from scipy.optimize import linprog
     import numpy as np
 
     def process_factory_line(line):
-
         # Parse line with regex
         capture_pattern = r"^(\[.*\]) (\(.*\)) (\{.*\})$"
-        target_state_string, button_presses_string, joltage_string = re.findall(capture_pattern, line)[0]
+        target_state_string, button_presses_string, joltage_string = re.findall(
+            capture_pattern, line
+        )[0]
 
         # Space dimentionality for this specific machine
-        space_dimentionality = len(re.findall(r'[\.#]+', target_state_string)[0])
+        space_dimentionality = len(re.findall(r"[\.#]+", target_state_string)[0])
 
         # One hot encode transitions
         def encode_transitions(s: str, size: int):
             result = []
-            
+
             # find contents inside parentheses
-            groups = re.findall(r'\(([^)]*)\)', s)
-        
+            groups = re.findall(r"\(([^)]*)\)", s)
+
             for group in groups:
-                values = [int(x.strip()) for x in group.split(',')]
+                values = [int(x.strip()) for x in group.split(",")]
                 encoded = [0] * size
                 for v in values:
                     encoded[v] = 1
                 result.append(encoded)
-            
+
             return result
 
         # Get states
-        initial_state = tuple([0] * space_dimentionality)
-        target_state = [int(y) for y in joltage_string[1:-1].split(',')]
-        allowed_transitions = encode_transitions(button_presses_string, space_dimentionality)
+        target_state = [int(y) for y in joltage_string[1:-1].split(",")]
+        allowed_transitions = encode_transitions(
+            button_presses_string, space_dimentionality
+        )
 
         # This is now a linear programming problem
-        c = np.ones([len(allowed_transitions)]) # all buttons count as 1 keypress
-        A_eq = np.array(allowed_transitions).T # vectors to combine
-        b_eq = np.array(target_state) # target equality value
+        c = np.ones([len(allowed_transitions)])  # all buttons count as 1 keypress
+        A_eq = np.array(allowed_transitions).T  # vectors to combine
+        b_eq = np.array(target_state)  # target equality value
 
         # Solve
-        ans = linprog(c = c, A_eq = A_eq, b_eq = b_eq, integrality = 1)
+        ans = linprog(c=c, A_eq=A_eq, b_eq=b_eq, integrality=1)
         min_button_presses = np.sum(np.round(ans.x))
 
-        return (min_button_presses)
+        return min_button_presses
 
     total_min_button_presses = 0
     for line in open(input_file, "r"):
@@ -718,13 +721,6 @@ def factory_program_2(input_file = "data/day10_factory_data.txt"):
 
     press_enter_to_continue()
 
-
-
-
-            
-    
-
-    
 
 def main_menu():
     from consolemenu import ConsoleMenu
@@ -798,9 +794,7 @@ def main_menu():
     function_item_17 = FunctionItem("Day 9: Red Tiles - part I", red_tiles_program)
     menu.append_item(function_item_17)
 
-    function_item_18 = FunctionItem(
-        "Day 9: Red Tiles - part II - NOT WORKING", None
-    )
+    function_item_18 = FunctionItem("Day 9: Red Tiles - part II - NOT WORKING", None)
     menu.append_item(function_item_18)
 
     function_item_19 = FunctionItem("Day 10: Factory - Part I", factory_program)
