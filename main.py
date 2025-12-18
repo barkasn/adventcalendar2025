@@ -661,6 +661,71 @@ def factory_program(input_file = "data/day10_factory_data.txt"):
 
     press_enter_to_continue()
 
+
+def factory_program_2(input_file = "data/day10_factory_data.txt"):
+    import igraph as ig
+    from bidict import bidict
+    from scipy.optimize import linprog
+    import numpy as np
+
+    def process_factory_line(line):
+
+        # Parse line with regex
+        capture_pattern = r"^(\[.*\]) (\(.*\)) (\{.*\})$"
+        target_state_string, button_presses_string, joltage_string = re.findall(capture_pattern, line)[0]
+
+        # Space dimentionality for this specific machine
+        space_dimentionality = len(re.findall(r'[\.#]+', target_state_string)[0])
+
+        # One hot encode transitions
+        def encode_transitions(s: str, size: int):
+            result = []
+            
+            # find contents inside parentheses
+            groups = re.findall(r'\(([^)]*)\)', s)
+        
+            for group in groups:
+                values = [int(x.strip()) for x in group.split(',')]
+                encoded = [0] * size
+                for v in values:
+                    encoded[v] = 1
+                result.append(encoded)
+            
+            return result
+
+        # Get states
+        initial_state = tuple([0] * space_dimentionality)
+        target_state = [int(y) for y in joltage_string[1:-1].split(',')]
+        allowed_transitions = encode_transitions(button_presses_string, space_dimentionality)
+
+        # This is now a linear programming problem
+        c = np.ones([len(allowed_transitions)]) # all buttons count as 1 keypress
+        A_eq = np.array(allowed_transitions).T # vectors to combine
+        b_eq = np.array(target_state) # target equality value
+
+        # Solve
+        ans = linprog(c = c, A_eq = A_eq, b_eq = b_eq, integrality = 1)
+        min_button_presses = np.sum(np.round(ans.x))
+
+        return (min_button_presses)
+
+    total_min_button_presses = 0
+    for line in open(input_file, "r"):
+        line = line.strip()
+        total_min_button_presses += process_factory_line(line)
+
+    print(f"Total minimum number of key presses: {total_min_button_presses}")
+
+    press_enter_to_continue()
+
+
+
+
+            
+    
+
+    
+
 def main_menu():
     from consolemenu import ConsoleMenu
     from consolemenu.items import FunctionItem
@@ -741,7 +806,8 @@ def main_menu():
     function_item_19 = FunctionItem("Day 10: Factory - Part I", factory_program)
     menu.append_item(function_item_19)
 
-
+    function_item_20 = FunctionItem("Day 10: Factory - Part II", factory_program_2)
+    menu.append_item(function_item_20)
 
     menu.show()
 
